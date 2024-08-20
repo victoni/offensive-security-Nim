@@ -1,7 +1,5 @@
 # ./portscanner [IP] [ports]
 
-#need to add multithreading
-
 import std/net
 import std/os
 import std/cmdline
@@ -14,10 +12,12 @@ let ip = paramStr(1)
 proc scanPort(port: int) =
     let socket = newSocket()
     try:
-        socket.connect(ip, Port(port)) # returns void
+        socket.connect(ip, Port(port), 5000) # returns void
         echo "Port ", port, " is open"
     except OSError as e:
         discard e.msg
+    except TimeoutError as t:
+        discard t.msg
 
 
 # For all ports given
